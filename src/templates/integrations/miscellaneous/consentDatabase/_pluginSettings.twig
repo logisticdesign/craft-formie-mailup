@@ -34,6 +34,7 @@
     errors: integration.getErrors('subscribeUrl'),
 }) }}
 
+{#
 {{ macros.proxyField(fieldVariables, 'autosuggestField', {
     label: 'Subscription List ID' | t('formie'),
     instructions: 'Enter your {name} {label} here.' | t('formie'),
@@ -45,7 +46,9 @@
     warning: macros.configWarning('subscribeListId', 'formie'),
     errors: integration.getErrors('subscribeListId'),
 }) }}
+#}
 
+{#
 {{ macros.proxyField(fieldVariables, 'booleanMenuField', {
     label: 'Double Opt-In' | t('formie'),
     name: 'subscribeDoubleOptIn',
@@ -54,3 +57,4 @@
     warning: macros.configWarning('subscribeDoubleOptIn', 'formie'),
     errors: integration.getErrors('subscribeDoubleOptIn'),
 }) }}
+#}

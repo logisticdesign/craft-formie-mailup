@@ -18,9 +18,9 @@ class Mailup extends EmailMarketing
 {
     public ?string $subscribeUrl = null;
 
-    public ?string $subscribeListId = null;
+    // public ?string $subscribeListId = null;
 
-    public ?bool $subscribeDoubleOptIn = null;
+    // public ?bool $subscribeDoubleOptIn = null;
 
     public ?array $fieldMapping = null;
 
@@ -67,6 +67,11 @@ class Mailup extends EmailMarketing
             new IntegrationField([
                 'handle' => 'email',
                 'name' => Craft::t('formie-mailup', 'Email'),
+                'required' => true,
+            ]),
+            new IntegrationField([
+                'handle' => 'listId',
+                'name' => Craft::t('formie-mailup', 'List ID'),
                 'required' => true,
             ]),
         ];
@@ -127,16 +132,16 @@ class Mailup extends EmailMarketing
     {
         $rules = parent::defineRules();
 
-        // $rules[] = [['subscribeUrl', 'subscribeListId'], 'required'];
+        $rules[] = [['subscribeUrl'], 'required'];
 
         $main = $this->getFormSettingValue('main');
 
         // Validate when saving form settings
-        // $rules[] = [
-        //     ['fieldMapping'], 'validateFieldMapping', 'params' => $main, 'when' => function($model) {
-        //         return $model->enabled;
-        //     }, 'on' => [Integration::SCENARIO_FORM],
-        // ];
+        $rules[] = [
+            ['fieldMapping'], 'validateFieldMapping', 'params' => $main, 'when' => function($model) {
+                return $model->enabled;
+            }, 'on' => [Integration::SCENARIO_FORM],
+        ];
 
         return $rules;
     }
