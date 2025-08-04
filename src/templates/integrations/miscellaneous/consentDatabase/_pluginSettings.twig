@@ -1,0 +1,56 @@
+{% import '_includes/forms' as forms %}
+{% import 'verbb-base/_macros' as macros %}
+
+{% set displayName = integration.displayName() %}
+
+{% set instructions %}
+### Connect to the {name} API
+1. Go to the <a target="_blank" href="https://mailup.it" target="_blank">Mailup admin console</a>.
+2. Select the List and click on Configurations > Advanced options > Developer options.
+3. Create a new API key, copy the **Client ID** and **Client Secret** and paste into the fields below.
+3. Insert the [Xmlsubscribe.aspx](https://helpmailup.atlassian.net/wiki/spaces/mailupapi/pages/36342599/HTTP+API+Specifications#Xmlsubscribe.aspx) URL, the List ID and if you want use Double Opt-In.
+5. Then click the **Save** button.
+{% endset %}
+
+<div class="fui-settings-block">
+    {{ instructions | t('formie', { name: displayName }) | md }}
+</div>
+
+{% if not craft.app.config.general.allowAdminChanges %}
+    <span class="warning with-icon">
+        {{ 'Integration settings can only be editable on an environment with `allowAdminChanges` enabled.' | t('formie') | md(inlineOnly=true) }}
+    </span>
+{% endif %}
+
+{{ macros.proxyField(fieldVariables, 'autosuggestField', {
+    label: 'Subscription URL' | t('formie'),
+    instructions: 'Enter your {name} {label} here.' | t('formie'),
+    name: 'subscribeUrl',
+    required: true,
+    placeholder: 'http://xxxx.emailsp.com/frontend/xmlsubscribe.aspx',
+    suggestEnvVars: true,
+    value: integration.settings.subscribeUrl ?? '',
+    warning: macros.configWarning('subscribeUrl', 'formie'),
+    errors: integration.getErrors('subscribeUrl'),
+}) }}
+
+{{ macros.proxyField(fieldVariables, 'autosuggestField', {
+    label: 'Subscription List ID' | t('formie'),
+    instructions: 'Enter your {name} {label} here.' | t('formie'),
+    name: 'subscribeListId',
+    required: true,
+    placeholder: 'e.g. 1',
+    suggestEnvVars: true,
+    value: integration.settings.subscribeListId ?? '',
+    warning: macros.configWarning('subscribeListId', 'formie'),
+    errors: integration.getErrors('subscribeListId'),
+}) }}
+
+{{ macros.proxyField(fieldVariables, 'booleanMenuField', {
+    label: 'Double Opt-In' | t('formie'),
+    name: 'subscribeDoubleOptIn',
+    value: integration.settings.subscribeDoubleOptIn ?? '',
+    includeEnvVars: true,
+    warning: macros.configWarning('subscribeDoubleOptIn', 'formie'),
+    errors: integration.getErrors('subscribeDoubleOptIn'),
+}) }}
