@@ -18,9 +18,9 @@ class Mailup extends EmailMarketing
 {
     public ?string $subscribeUrl = null;
 
-    // public ?string $subscribeListId = null;
+    public ?string $subscribeListId = null;
 
-    // public ?bool $subscribeDoubleOptIn = null;
+    public bool|string $subscribeDoubleOptIn = false;
 
     public ?array $fieldMapping = null;
 
@@ -69,11 +69,6 @@ class Mailup extends EmailMarketing
                 'name' => Craft::t('formie-mailup', 'Email'),
                 'required' => true,
             ]),
-            new IntegrationField([
-                'handle' => 'listId',
-                'name' => Craft::t('formie-mailup', 'List ID'),
-                'required' => true,
-            ]),
         ];
 
         return new IntegrationFormSettings([
@@ -83,23 +78,25 @@ class Mailup extends EmailMarketing
 
     public function sendPayload(Submission $submission): bool
     {
-        // try {
-        //     $formValues = $this->getFieldMappingValues($submission, $this->fieldMapping, $this->getFormSettingValue('main'));
+        try {
+            $formValues = $this->getFieldMappingValues($submission, $this->fieldMapping, $this->getFormSettingValue('main'));
 
-        //     $payload = [
-        //         'list' => App::parseEnv($this->subscribeListId),
-        //         'email' => $formValues['email'] ?? null,
-        //         'source' => 'website',
-        //         'confirm' => App::parseEnv($this->subscribeDoubleOptIn),
-        //     ];
+            dd($formValues);
 
-        //     $this->deliverPayload($submission, '/', $payload);
+            // $payload = [
+            //     'list' => App::parseEnv($this->subscribeListId),
+            //     'email' => $formValues['email'] ?? null,
+            //     'source' => 'website',
+            //     'confirm' => App::parseEnv($this->subscribeDoubleOptIn),
+            // ];
 
-        // } catch (Throwable $e) {
-        //     Integration::apiError($this, $e);
+            // $this->deliverPayload($submission, '/', $payload);
 
-        //     return false;
-        // }
+        } catch (Throwable $e) {
+            Integration::apiError($this, $e);
+
+            return false;
+        }
 
         return true;
     }
@@ -117,6 +114,8 @@ class Mailup extends EmailMarketing
 
     public function fetchConnection(): bool
     {
+        return true;
+
         try {
             $this->request('GET', '/');
         } catch (Throwable $e) {
@@ -132,7 +131,7 @@ class Mailup extends EmailMarketing
     {
         $rules = parent::defineRules();
 
-        $rules[] = [['subscribeUrl'], 'required'];
+        $rules[] = [['subscribeUrl', 'subscribeListId'], 'required'];
 
         $main = $this->getFormSettingValue('main');
 

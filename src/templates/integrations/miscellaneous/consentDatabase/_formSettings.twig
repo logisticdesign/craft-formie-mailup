@@ -13,6 +13,10 @@
     :value="get(form, 'settings.integrations.{{ handle }}.optInField')"
 ></field-select>
 
+<input type="text" name="listId" value="">
+
+{{ dump(integration.subscribeListId) }}
+
 <hr>
 
 <integration-form-settings handle="{{ handle }}" :form-settings="{{ formSettings | json_encode }}">
