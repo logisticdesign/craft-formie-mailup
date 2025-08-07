@@ -4,6 +4,8 @@ namespace logisticdesign\formiemailup\integrations\miscellaneous;
 
 use Craft;
 use craft\helpers\App;
+use craft\helpers\Json;
+use Exception;
 use GuzzleHttp\Client;
 use Throwable;
 use verbb\formie\base\EmailMarketing;
@@ -16,11 +18,12 @@ use verbb\formie\models\IntegrationFormSettings;
 
 class Mailup extends EmailMarketing
 {
-    public ?string $subscribeUrl = null;
+    // Properties
+    // =========================================================================
 
-    public ?string $subscribeListId = null;
-
-    public bool|string $subscribeDoubleOptIn = false;
+    public ?string $url = null;
+    public ?string $listId = null;
+    public bool|string $doubleOptIn = false;
 
     public ?array $fieldMapping = null;
 
@@ -31,6 +34,9 @@ class Mailup extends EmailMarketing
         3 => 'Recipient already subscribed',
         -1011 => 'IP not registered',
     ];
+
+    // Methods
+    // =========================================================================
 
     public static function displayName(): string
     {
@@ -81,16 +87,22 @@ class Mailup extends EmailMarketing
         try {
             $formValues = $this->getFieldMappingValues($submission, $this->fieldMapping, $this->getFormSettingValue('main'));
 
-            dd($formValues);
+            $email = $formValues['email'] ?? null;
 
-            // $payload = [
-            //     'list' => App::parseEnv($this->subscribeListId),
-            //     'email' => $formValues['email'] ?? null,
-            //     'source' => 'website',
-            //     'confirm' => App::parseEnv($this->subscribeDoubleOptIn),
-            // ];
+            $payload = [
+                'list' => (int) App::parseEnv($this->listId),
+                'email' => strlen($email) > 0 ? mb_strtolower($email) : null,
+                'source' => 'website',
+                'confirm' => App::parseEnv($this->doubleOptIn),
+                'retCode' => 1,
+            ];
 
-            // $this->deliverPayload($submission, '/', $payload);
+            $response = $this->deliverPayloadRequest($submission, 'frontend/xmlsubscribe.aspx', $payload, contentType: 'query');
+            $subscriptionCode = Json::decode($response->getBody());
+
+            if (in_array($subscriptionCode, [1, -1011])) {
+                throw new Exception($this->status[$subscriptionCode]);
+            }
 
         } catch (Throwable $e) {
             Integration::apiError($this, $e);
@@ -107,17 +119,17 @@ class Mailup extends EmailMarketing
             return $this->_client;
         }
 
+        $baseUri = rtrim(App::parseEnv($this->url), '/').'/';
+
         return $this->_client = Craft::createGuzzleClient([
-            'base_uri' => App::parseEnv($this->subscribeUrl),
+            'base_uri' => $baseUri,
         ]);
     }
 
     public function fetchConnection(): bool
     {
-        return true;
-
         try {
-            $this->request('GET', '/');
+            $this->request('GET', 'frontend/xmlsubscribe.aspx');
         } catch (Throwable $e) {
             Integration::apiError($this, $e);
 
@@ -131,7 +143,7 @@ class Mailup extends EmailMarketing
     {
         $rules = parent::defineRules();
 
-        $rules[] = [['subscribeUrl', 'subscribeListId'], 'required'];
+        $rules[] = [['url', 'listId'], 'required'];
 
         $main = $this->getFormSettingValue('main');
 

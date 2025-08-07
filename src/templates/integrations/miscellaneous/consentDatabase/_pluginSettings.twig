@@ -25,32 +25,32 @@
 {{ macros.proxyField(fieldVariables, 'autosuggestField', {
     label: 'Subscription URL' | t('formie'),
     instructions: 'Enter your {name} {label} here.' | t('formie'),
-    name: 'subscribeUrl',
+    name: 'url',
     required: true,
     placeholder: 'http://xxxx.emailsp.com/frontend/xmlsubscribe.aspx',
     suggestEnvVars: true,
-    value: integration.settings.subscribeUrl ?? '',
-    warning: macros.configWarning('subscribeUrl', 'formie'),
-    errors: integration.getErrors('subscribeUrl'),
+    value: integration.settings.url ?? '',
+    warning: macros.configWarning('url', 'formie'),
+    errors: integration.getErrors('url'),
 }) }}
 
 {{ macros.proxyField(fieldVariables, 'autosuggestField', {
     label: 'Subscription List ID' | t('formie'),
     instructions: 'Enter your {name} {label} here.' | t('formie'),
-    name: 'subscribeListId',
+    name: 'listId',
     required: true,
     placeholder: 'e.g. 1',
     suggestEnvVars: true,
-    value: integration.settings.subscribeListId ?? '',
-    warning: macros.configWarning('subscribeListId', 'formie'),
-    errors: integration.getErrors('subscribeListId'),
+    value: integration.settings.listId ?? '',
+    warning: macros.configWarning('listId', 'formie'),
+    errors: integration.getErrors('listId'),
 }) }}
 
 {{ macros.proxyField(fieldVariables, 'booleanMenuField', {
     label: 'Double Opt-In' | t('formie'),
-    name: 'subscribeDoubleOptIn',
-    value: integration.settings.subscribeDoubleOptIn ?? false,
+    name: 'doubleOptIn',
+    value: integration.settings.doubleOptIn ?? false,
     includeEnvVars: true,
-    warning: macros.configWarning('subscribeDoubleOptIn', 'formie'),
-    errors: integration.getErrors('subscribeDoubleOptIn'),
+    warning: macros.configWarning('doubleOptIn', 'formie'),
+    errors: integration.getErrors('doubleOptIn'),
 }) }}
