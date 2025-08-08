@@ -23,11 +23,11 @@
 {% endif %}
 
 {{ macros.proxyField(fieldVariables, 'autosuggestField', {
-    label: 'Subscription URL' | t('formie'),
+    label: 'Admin Console URL' | t('formie'),
     instructions: 'Enter your {name} {label} here.' | t('formie'),
     name: 'url',
     required: true,
-    placeholder: 'http://xxxx.emailsp.com/frontend/xmlsubscribe.aspx',
+    placeholder: 'http://xxxx.emailsp.com',
     suggestEnvVars: true,
     value: integration.settings.url ?? '',
     warning: macros.configWarning('url', 'formie'),
@@ -35,7 +35,7 @@
 }) }}
 
 {{ macros.proxyField(fieldVariables, 'autosuggestField', {
-    label: 'Subscription List ID' | t('formie'),
+    label: 'List ID' | t('formie'),
     instructions: 'Enter your {name} {label} here.' | t('formie'),
     name: 'listId',
     required: true,
