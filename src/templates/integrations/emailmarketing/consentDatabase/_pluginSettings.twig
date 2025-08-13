@@ -5,11 +5,11 @@
 
 {% set instructions %}
 ### Connect to the {name} API
-1. Go to the <a target="_blank" href="https://mailup.it" target="_blank">Mailup admin console</a>.
-2. Select the List and click on Configurations > Advanced options > Developer options.
-3. Create a new API key, copy the **Client ID** and **Client Secret** and paste into the fields below.
-3. Insert the [Xmlsubscribe.aspx](https://helpmailup.atlassian.net/wiki/spaces/mailupapi/pages/36342599/HTTP+API+Specifications#Xmlsubscribe.aspx) URL, the List ID and if you want use Double Opt-In.
+1. Login into your <a target="_blank" href="https://mailup.it" target="_blank">Mailup Admin Console</a>.
+2. Copy the Admin Console URL (e.g. xxxx.emailsp.com) from the browser address bar.
+3. Paste the Admin Console URL into the field below, fill the List ID and choose if you want use Double Opt-In.
 5. Then click the **Save** button.
+4. If you have any doubts, check the [documentation](https://helpmailup.atlassian.net/wiki/spaces/mailupapi/pages/36342599/HTTP+API+Specifications#Xmlsubscribe.aspx).
 {% endset %}
 
 <div class="fui-settings-block">
@@ -27,7 +27,7 @@
     instructions: 'Enter your {name} {label} here.' | t('formie'),
     name: 'url',
     required: true,
-    placeholder: 'http://xxxx.emailsp.com',
+    placeholder: 'https://xxxx.emailsp.com',
     suggestEnvVars: true,
     value: integration.settings.url ?? '',
     warning: macros.configWarning('url', 'formie'),

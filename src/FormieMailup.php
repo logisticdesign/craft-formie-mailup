@@ -4,8 +4,7 @@ namespace logisticdesign\formiemailup;
 
 use Craft;
 use craft\base\Plugin;
-use logisticdesign\formiemailup\integrations\miscellaneous\ConsentDatabase;
-use logisticdesign\formiemailup\integrations\miscellaneous\Mailup;
+use logisticdesign\formiemailup\integrations\emailmarketing\Mailup;
 use verbb\formie\events\RegisterIntegrationsEvent;
 use verbb\formie\services\Integrations;
 use yii\base\Event;

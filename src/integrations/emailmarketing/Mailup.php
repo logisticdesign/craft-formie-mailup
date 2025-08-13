@@ -1,6 +1,6 @@
 <?php
 
-namespace logisticdesign\formiemailup\integrations\miscellaneous;
+namespace logisticdesign\formiemailup\integrations\emailmarketing;
 
 use Craft;
 use craft\helpers\App;
@@ -10,9 +10,7 @@ use GuzzleHttp\Client;
 use Throwable;
 use verbb\formie\base\EmailMarketing;
 use verbb\formie\base\Integration;
-use verbb\formie\base\Miscellaneous;
 use verbb\formie\elements\Submission;
-use verbb\formie\Formie;
 use verbb\formie\models\IntegrationField;
 use verbb\formie\models\IntegrationFormSettings;
 
@@ -57,14 +55,14 @@ class Mailup extends EmailMarketing
     {
         $variables = $this->getSettingsHtmlVariables();
 
-        return Craft::$app->getView()->renderTemplate('formie-mailup/integrations/miscellaneous/consentDatabase/_pluginSettings', $variables);
+        return Craft::$app->getView()->renderTemplate('formie-mailup/integrations/emailmarketing/consentDatabase/_pluginSettings', $variables);
     }
 
     public function getFormSettingsHtml($form): string
     {
         $variables = $this->getFormSettingsHtmlVariables($form);
 
-        return Craft::$app->getView()->renderTemplate('formie-mailup/integrations/miscellaneous/consentDatabase/_formSettings', $variables);
+        return Craft::$app->getView()->renderTemplate('formie-mailup/integrations/emailmarketing/consentDatabase/_formSettings', $variables);
     }
 
     public function fetchFormSettings(): IntegrationFormSettings
