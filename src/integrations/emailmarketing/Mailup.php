@@ -96,6 +96,12 @@ class Mailup extends EmailMarketing
             ];
 
             $response = $this->deliverPayloadRequest($submission, 'frontend/xmlsubscribe.aspx', $payload, contentType: 'query');
+
+            // The payload was cancelled (e.g. opt-in field not checked)
+            if ($response === false) {
+                return true;
+            }
+
             $subscriptionCode = Json::decode($response->getBody());
 
             if (in_array($subscriptionCode, [1, -1011])) {
